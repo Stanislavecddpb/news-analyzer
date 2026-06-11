@@ -1,0 +1,30 @@
+# Локальный запуск прототипа. PostgreSQL включён как целевое хранилище результатов
+# (в MVP-коде ещё не используется — см. план развития в docs/architecture.md).
+
+services:
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      CLUSTER_DISTANCE_THRESHOLD: "0.6"
+      ATTRIBUTE_BOOST: "3"
+      SENTIMENT_NEUTRAL_BAND: "0.05"
+      # DATABASE_URL: "postgresql+asyncpg://news:news@db:5432/news"
+    # depends_on:
+    #   - db
+    restart: unless-stopped
+
+  # db:
+  #   image: postgres:16-alpine
+  #   environment:
+  #     POSTGRES_USER: news
+  #     POSTGRES_PASSWORD: news
+  #     POSTGRES_DB: news
+  #   ports:
+  #     - "5432:5432"
+  #   volumes:
+  #     - pgdata:/var/lib/postgresql/data
+
+# volumes:
+#   pgdata:
