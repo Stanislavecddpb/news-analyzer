@@ -16,6 +16,10 @@ from app.sentiment import SentimentAnalyzer
 
 
 def main() -> None:
+    # Windows-консоль по умолчанию не UTF-8 — без этого русский вывод превращается в кракозябры.
+    if sys.stdout.encoding and sys.stdout.encoding.lower() not in ("utf-8", "utf8"):
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+
     path = Path(sys.argv[1]) if len(sys.argv) > 1 else Path("data/sample_news.json")
     items = [NewsItem(**row) for row in json.loads(path.read_text(encoding="utf-8"))]
 

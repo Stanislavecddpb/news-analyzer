@@ -27,9 +27,10 @@ def test_negation_flips_polarity():
 
 
 def test_intensifier_amplifies():
-    base = _score("акции упали")  # содержит «падение»? нет — проверим на словарном терме
+    base = _score("обвал акций")
     strong = _score("резкий обвал акций")
-    assert strong <= base or strong < 0
+    assert base < 0
+    assert strong < base  # усилитель делает негатив более выраженным
 
 
 def test_score_bounded():

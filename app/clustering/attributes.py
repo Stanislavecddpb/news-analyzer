@@ -57,14 +57,16 @@ def _extract_companies(text: str, stems: set[str], joined_stem: str) -> list[str
     return _rank_by_frequency(found)
 
 
-def _extract_locations(text: str, joined_stem: str) -> list[str]:
+def _extract_locations(tokens: list[str], stems: set[str], text: str, joined_stem: str) -> list[str]:
     found: Counter[str] = Counter()
     low = text.lower()
     for key, canonical in LOCATIONS.items():
         if " " in key:
             if key in joined_stem or key in low:
                 found[canonical] += 1
-        elif key in joined_stem or key in low:
+        # Однословный ключ — префикс целого токена/стемма, а не произвольная
+        # подстрока: иначе короткие ключи («уф») срабатывают внутри слов («буфет»).
+        elif any(t.startswith(key) for t in tokens) or any(s.startswith(key) for s in stems):
             found[canonical] += 1
     return _rank_by_frequency(found)
 
@@ -93,6 +95,6 @@ def extract_attributes(title: str, text: str) -> Attributes:
 
     return Attributes(
         companies=_extract_companies(full, stems, joined_stem),
-        locations=_extract_locations(full, joined_stem),
+        locations=_extract_locations(tokens, stems, full, joined_stem),
         industries=_extract_industries(stems, joined_stem),
     )

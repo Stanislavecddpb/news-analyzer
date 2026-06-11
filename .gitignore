@@ -18,9 +18,10 @@ htmlcov/
 .mypy_cache/
 .ruff_cache/
 
-# IDE
+# IDE / локальные настройки инструментов
 .idea/
 .vscode/
+.claude/
 *.swp
 
 # ОС

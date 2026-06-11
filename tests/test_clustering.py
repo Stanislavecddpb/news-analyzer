@@ -13,6 +13,12 @@ def test_extract_location():
     assert "Екатеринбург" in attrs.locations
 
 
+def test_location_key_not_matched_inside_word():
+    # Короткий ключ («уф» → Уфа) не должен срабатывать внутри слова «буфет».
+    attrs = extract_attributes("", "В буфете компании прошла встреча")
+    assert "Уфа" not in attrs.locations
+
+
 def test_extract_company_by_legal_form():
     attrs = extract_attributes("", 'ООО «Уральские моторы» нарастило экспорт')
     assert any("Уральск" in c for c in attrs.companies)
